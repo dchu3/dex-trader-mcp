@@ -1,10 +1,9 @@
 # dex-trader-mcp
 
-A TypeScript MCP (Model Context Protocol) server for Solana token trading via Jupiter aggregator and token analysis via RugCheck.
+A TypeScript MCP (Model Context Protocol) server for Solana token trading via Jupiter aggregator.
 
 ## Features
 
-- **Token Analysis** — RugCheck API integration for Solana token safety reports
 - **Token Trading** — Buy and sell tokens using Jupiter aggregator for best prices across all DEXs
 - **Swap Quotes** — Preview trades before executing (price, output, route, price impact)
 - **Balance Checking** — Check wallet SOL and token balances
@@ -46,13 +45,6 @@ Add to your MCP client configuration:
 
 ## Tools
 
-### get_token_summary
-
-Fetches a token report summary from the RugCheck API.
-
-**Parameters:**
-- `token_address` (string, required): The Solana token contract address
-
 ### get_quote
 
 Preview a swap via Jupiter aggregator without executing. Returns price, output amount, price impact, and routing info.
@@ -92,5 +84,4 @@ Check wallet SOL balance and optionally a specific token balance.
 
 ## API References
 
-- [RugCheck API](https://api.rugcheck.xyz/v1) — Token safety analysis
 - [Jupiter V6 API](https://quote-api.jup.ag/v6) — DEX aggregation and swaps
