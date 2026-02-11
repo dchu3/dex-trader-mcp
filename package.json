@@ -1,0 +1,32 @@
+{
+  "name": "dex-rugcheck-mcp",
+  "version": "1.0.0",
+  "description": "TypeScript RugCheck MCP server",
+  "main": "dist/index.js",
+  "bin": {
+    "dex-rugcheck-mcp": "dist/index.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dchu3/dex-rugcheck-mcp.git"
+  },
+  "keywords": ["mcp", "rugcheck", "solana"],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/dchu3/dex-rugcheck-mcp/issues"
+  },
+  "homepage": "https://github.com/dchu3/dex-rugcheck-mcp#readme",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.25.2"
+  },
+  "devDependencies": {
+    "@types/node": "^25.0.6",
+    "typescript": "^5.9.3"
+  }
+}
