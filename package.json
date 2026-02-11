@@ -1,7 +1,7 @@
 {
   "name": "dex-trader-mcp",
   "version": "2.0.0",
-  "description": "TypeScript MCP server for Solana token trading via Jupiter and RugCheck analysis",
+  "description": "TypeScript MCP server for Solana token trading via Jupiter aggregator",
   "main": "dist/index.js",
   "bin": {
     "dex-trader-mcp": "dist/index.js"
@@ -16,7 +16,6 @@
   },
   "keywords": [
     "mcp",
-    "rugcheck",
     "solana",
     "jupiter",
     "dex",

@@ -23,7 +23,6 @@ This is a **Model Context Protocol (MCP) server** that exposes Solana blockchain
 
 | API | Base URL | Purpose |
 |-----|----------|---------|
-| RugCheck | `https://api.rugcheck.xyz/v1` | Token safety/rug-pull analysis |
 | Jupiter V6 | `https://quote-api.jup.ag/v6` | DEX aggregation, quotes, and swap transactions |
 | Solana RPC | Configurable via `SOLANA_RPC_URL` | On-chain reads and transaction submission |
 
