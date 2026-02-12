@@ -24,6 +24,14 @@ npm run build
 | `SOLANA_PRIVATE_KEY` | For trading/balance tools | Base58-encoded Solana wallet private key |
 | `SOLANA_RPC_URL` | No | Custom Solana RPC endpoint (defaults to `https://api.mainnet-beta.solana.com`) |
 
+Variables can be set via a `.env` file in the project root. Copy the example file to get started:
+
+```bash
+cp .env.example .env
+```
+
+Then edit `.env` with your values. The `.env` file is git-ignored and will not be committed.
+
 ### As an MCP Server
 
 Add to your MCP client configuration:
