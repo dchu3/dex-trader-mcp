@@ -1,6 +1,6 @@
 import { Connection, Keypair, VersionedTransaction } from "@solana/web3.js";
 
-const JUPITER_API_BASE = "https://quote-api.jup.ag/v6";
+const JUPITER_API_BASE = "https://lite-api.jup.ag/swap/v1";
 const FETCH_TIMEOUT_MS = 30000;
 
 export interface JupiterQuote {
