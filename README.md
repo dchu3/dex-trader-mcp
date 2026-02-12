@@ -82,6 +82,15 @@ Check wallet SOL balance and optionally a specific token balance.
 **Parameters:**
 - `token_address` (string, optional): Mint address of a token to check balance for
 
-## API References
+## API
 
-- [Jupiter V6 API](https://quote-api.jup.ag/v6) — DEX aggregation and swaps
+This server uses the [Jupiter Lite API](https://dev.jup.ag/docs/swap/get-quote) (`lite-api.jup.ag/swap/v1`) for DEX aggregation and swaps. The Lite API is free and requires no API key.
+
+### Rate Limits
+
+| Tier | Limit | Notes |
+|------|-------|-------|
+| Free (Lite API) | 60 requests/minute | Shared across all endpoints (quote, swap, etc.) |
+| Pro ([portal.jup.ag](https://portal.jup.ag)) | Higher limits | Requires API key via `api.jup.ag` |
+
+Exceeding the free tier limit returns HTTP 429 (Too Many Requests). For higher throughput, register for a free API key at [portal.jup.ag](https://portal.jup.ag) and switch to `api.jup.ag/swap/v1`.
