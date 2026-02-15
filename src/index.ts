@@ -49,8 +49,7 @@ server.tool(
       .int()
       .min(1)
       .max(5000)
-      .default(50)
-      .describe("Slippage tolerance in basis points (default 50 = 0.5%)"),
+      .describe("Slippage tolerance in basis points (e.g. 50 = 0.5%, 100 = 1%)"),
   },
   async ({ input_mint, output_mint, amount, input_decimals, slippage_bps }) => {
     try {
@@ -109,8 +108,7 @@ server.tool(
       .int()
       .min(1)
       .max(5000)
-      .default(50)
-      .describe("Slippage tolerance in basis points (default 50 = 0.5%)"),
+      .describe("Slippage tolerance in basis points (e.g. 50 = 0.5%, 100 = 1%)"),
   },
   async ({ token_address, sol_amount, slippage_bps }) => {
     try {
@@ -166,8 +164,7 @@ server.tool(
       .int()
       .min(1)
       .max(5000)
-      .default(50)
-      .describe("Slippage tolerance in basis points (default 50 = 0.5%)"),
+      .describe("Slippage tolerance in basis points (e.g. 50 = 0.5%, 100 = 1%)"),
   },
   async ({ token_address, token_amount, token_decimals, slippage_bps }) => {
     try {
@@ -219,8 +216,7 @@ server.tool(
       .int()
       .min(1)
       .max(5000)
-      .default(50)
-      .describe("Slippage tolerance in basis points (default 50 = 0.5%)"),
+      .describe("Slippage tolerance in basis points (e.g. 50 = 0.5%, 100 = 1%)"),
   },
   async ({ token_address, sol_amount, slippage_bps }) => {
     const keypair = getKeypair();
