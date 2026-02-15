@@ -33,7 +33,7 @@ export async function getQuote(
   inputMint: string,
   outputMint: string,
   amount: number,
-  slippageBps: number = 50
+  slippageBps: number
 ): Promise<JupiterQuote> {
   const params = new URLSearchParams({
     inputMint,
