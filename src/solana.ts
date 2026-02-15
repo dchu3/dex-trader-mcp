@@ -33,6 +33,26 @@ export async function getSolBalance(connection: Connection, publicKey: PublicKey
   return balance / LAMPORTS_PER_SOL;
 }
 
+const decimalsCache = new Map<string, number>();
+
+export async function getTokenDecimals(
+  connection: Connection,
+  mintAddress: string
+): Promise<number> {
+  const cached = decimalsCache.get(mintAddress);
+  if (cached !== undefined) return cached;
+
+  const mint = new PublicKey(mintAddress);
+  const info = await connection.getParsedAccountInfo(mint);
+  const data = info?.value?.data;
+  if (data && typeof data === "object" && "parsed" in data) {
+    const decimals: number = data.parsed.info.decimals;
+    decimalsCache.set(mintAddress, decimals);
+    return decimals;
+  }
+  throw new Error(`Failed to fetch decimals for mint ${mintAddress}`);
+}
+
 export async function getTokenBalance(
   connection: Connection,
   walletAddress: PublicKey,

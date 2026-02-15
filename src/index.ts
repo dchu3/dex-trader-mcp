@@ -10,6 +10,7 @@ import {
   getKeypair,
   getSolBalance,
   getTokenBalance,
+  getTokenDecimals,
   SOL_MINT,
   SOL_DECIMALS,
 } from "./solana.js";
@@ -199,6 +200,107 @@ server.tool(
         content: [{ type: "text" as const, text: `Error: ${msg}` }],
       };
     }
+  }
+);
+
+// --- Buy and Sell (Atomic) Tool ---
+
+server.tool(
+  "buy_and_sell",
+  "Atomically buy a token and immediately sell it back for SOL. Executes both swaps back-to-back for tightest execution. Returns partial result if buy succeeds but sell fails.",
+  {
+    token_address: z.string().describe("Mint address of the token to trade"),
+    sol_amount: z
+      .number()
+      .positive()
+      .describe("Amount of SOL to spend on the buy side"),
+    slippage_bps: z
+      .number()
+      .int()
+      .min(1)
+      .max(5000)
+      .default(50)
+      .describe("Slippage tolerance in basis points (default 50 = 0.5%)"),
+  },
+  async ({ token_address, sol_amount, slippage_bps }) => {
+    const keypair = getKeypair();
+    const connection = getConnection();
+
+    // --- Step 1: Buy token with SOL ---
+    let buyTxid: string;
+    let buyOutAmount: string;
+    try {
+      const rawSolAmount = Math.round(sol_amount * LAMPORTS_PER_SOL);
+      const buyQuote = await getQuote(SOL_MINT, token_address, rawSolAmount, slippage_bps);
+      buyTxid = await executeSwap(buyQuote, keypair, connection);
+      buyOutAmount = buyQuote.outAmount;
+    } catch (error) {
+      const msg = error instanceof Error ? error.message : "Unknown error";
+      return {
+        content: [
+          {
+            type: "text" as const,
+            text: JSON.stringify({ status: "error", phase: "buy", error: msg }),
+          },
+        ],
+      };
+    }
+
+    // --- Step 2: Get token decimals and sell all received tokens ---
+    let sellTxid: string;
+    let solReceived: number;
+    let tokenDecimals: number;
+    try {
+      tokenDecimals = await getTokenDecimals(connection, token_address);
+      const tokenAmount = Number(buyOutAmount) / 10 ** tokenDecimals;
+      const rawTokenAmount = Math.round(tokenAmount * 10 ** tokenDecimals);
+
+      const sellQuote = await getQuote(token_address, SOL_MINT, rawTokenAmount, slippage_bps);
+      sellTxid = await executeSwap(sellQuote, keypair, connection);
+      solReceived = Number(sellQuote.outAmount) / LAMPORTS_PER_SOL;
+    } catch (error) {
+      // Buy succeeded but sell failed — return partial result
+      const msg = error instanceof Error ? error.message : "Unknown error";
+      return {
+        content: [
+          {
+            type: "text" as const,
+            text: JSON.stringify({
+              status: "partial",
+              buy_transaction: buyTxid,
+              sol_spent: sol_amount,
+              token_received: buyOutAmount,
+              token_mint: token_address,
+              sell_error: msg,
+              explorer: `https://solscan.io/tx/${buyTxid}`,
+            }),
+          },
+        ],
+      };
+    }
+
+    const tokenAmount = Number(buyOutAmount) / 10 ** tokenDecimals;
+    const profitSol = solReceived - sol_amount;
+    const result = {
+      status: "success",
+      buy_transaction: buyTxid,
+      sell_transaction: sellTxid,
+      sol_spent: sol_amount,
+      token_received: buyOutAmount,
+      token_sold: tokenAmount,
+      sol_received: solReceived,
+      token_mint: token_address,
+      net_sol: profitSol,
+      profit_sol: profitSol,
+      explorer_buy: `https://solscan.io/tx/${buyTxid}`,
+      explorer_sell: `https://solscan.io/tx/${sellTxid}`,
+    };
+
+    return {
+      content: [
+        { type: "text" as const, text: JSON.stringify(result, null, 2) },
+      ],
+    };
   }
 );
 
